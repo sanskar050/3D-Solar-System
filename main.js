@@ -6,8 +6,12 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 15;
 
+const canvas = document.querySelector("canvas")
+const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+
 let loader = new THREE.TextureLoader();
-let stars = loader.load('./public/stars.jpg');
+let stars = loader.load('/stars.jpg');
 scene.background = stars;
 
 let ambient = new THREE.AmbientLight(0xffffff, 3)
@@ -16,20 +20,25 @@ scene.add(ambient)
 // Add lil-gui controls for each planet
 const gui = new lil.GUI();
 
+// Animation controls
+const animationFolder = gui.addFolder('Animation');
+animationFolder.add({ start: startAnimation }, 'start').name('Start Animation');
+animationFolder.add({ stop: stopAnimation }, 'stop').name('Stop Animation');
+
 // Sun using SphereGeometry
-let sunLoader = loader.load('./public/sun.jpg')
-const sun_geometry = new THREE.SphereGeometry(1, 30, 27);
+let sunLoader = loader.load('/sun.jpg')
+const sun_geometry = new THREE.SphereGeometry(1.3, 30, 27);
 const sun_material = new THREE.MeshStandardMaterial({ map: sunLoader });
 const sun = new THREE.Mesh(sun_geometry, sun_material);
-sun.castShadow = true; //default is false
-sun.receiveShadow = false;
 scene.add(sun);
+
+const sunSettings = {
+  sunRotationSpeed: .001
+};
 
 // Sun controls
 const sunFolder = gui.addFolder('Sun');
-sunFolder.add(sun.position, 'x', -20, 20).name('Position X');
-sunFolder.add(sun.position, 'y', -20, 20).name('Position Y');
-sunFolder.add(sun.position, 'z', -20, 20).name('Position Z');
+sunFolder.add(sunSettings, 'sunRotationSpeed', 0, 0.05).name('Rotation Speed');
 sunFolder.add(sun.material, 'wireframe').name('Wireframe');
 sunFolder.open();
 
@@ -41,17 +50,19 @@ mercury_ring.rotation.x = Math.PI / 2;
 scene.add(mercury_ring);
 
 // Mercury using SphereGeometry
-let mercuryLoader = loader.load('./public/mercury.jpg')
+let mercuryLoader = loader.load('/mercury.jpg')
 const mercury_geometry = new THREE.SphereGeometry(.31, 25, 23);
 const mercury_material = new THREE.MeshStandardMaterial({ map: mercuryLoader });
 const mercury = new THREE.Mesh(mercury_geometry, mercury_material);
 scene.add(mercury);
 
+const mercurySettings = {
+  mercuryRotationSpeed: .001
+};
+
 // Mercury controls
 const mercuryFolder = gui.addFolder('Mercury');
-mercuryFolder.add(mercury.position, 'x', -20, 20).name('Position X');
-mercuryFolder.add(mercury.position, 'y', -20, 20).name('Position Y');
-mercuryFolder.add(mercury.position, 'z', -20, 20).name('Position Z');
+mercuryFolder.add(mercurySettings, 'mercuryRotationSpeed', 0, 0.05).name('Rotation Speed');
 mercuryFolder.add(mercury.material, 'wireframe').name('Wireframe');
 mercuryFolder.open();
 
@@ -63,17 +74,19 @@ venus_ring.rotation.x = Math.PI / 2;
 scene.add(venus_ring);
 
 // Venus using SphereGeometry
-let venusLoader = loader.load('./public/venus.jpg')
+let venusLoader = loader.load('/venus.jpg')
 const venus_geometry = new THREE.SphereGeometry(.31, 25, 23);
 const venus_material = new THREE.MeshStandardMaterial({ map: venusLoader });
 const venus = new THREE.Mesh(venus_geometry, venus_material);
 scene.add(venus);
 
+const venusSettings = {
+  venusRotationSpeed: .001
+};
+
 // Venus controls
 const venusFolder = gui.addFolder('Venus');
-venusFolder.add(venus.position, 'x', -20, 20).name('Position X');
-venusFolder.add(venus.position, 'y', -20, 20).name('Position Y');
-venusFolder.add(venus.position, 'z', -20, 20).name('Position Z');
+venusFolder.add(venusSettings, 'venusRotationSpeed', 0, 0.05).name('Rotation Speed');
 venusFolder.add(venus.material, 'wireframe').name('Wireframe');
 venusFolder.open();
 
@@ -85,18 +98,20 @@ earth_ring.rotation.x = Math.PI / 2;
 scene.add(earth_ring);
 
 // Earth using SphereGeometry
-let earthLoader = loader.load('./public/earth.jpg')
+let earthLoader = loader.load('/earth.jpg')
 const earth_geometry = new THREE.SphereGeometry(.31, 25, 23);
 const earth_material = new THREE.MeshStandardMaterial({ map: earthLoader });
 const earth = new THREE.Mesh(earth_geometry, earth_material);
 earth.position.x = 4.6; // Position Earth at a distance from the Sun
 scene.add(earth);
 
+const earthSettings = {
+  earthRotationSpeed: .001
+};
+
 // Earth controls
 const earthFolder = gui.addFolder('Earth');
-earthFolder.add(earth.position, 'x', -20, 20).name('Position X');
-earthFolder.add(earth.position, 'y', -20, 20).name('Position Y');
-earthFolder.add(earth.position, 'z', -20, 20).name('Position Z');
+earthFolder.add(earthSettings, 'earthRotationSpeed', 0, 0.05).name('Rotation Speed');
 earthFolder.add(earth.material, 'wireframe').name('Wireframe');
 earthFolder.open();
 
@@ -108,18 +123,20 @@ mars_ring.rotation.x = Math.PI / 2;
 scene.add(mars_ring);
 
 // Mars using SphereGeometry
-let marsLoader = loader.load('./public/mars.jpg')
+let marsLoader = loader.load('/mars.jpg')
 const mars_geometry = new THREE.SphereGeometry(.31, 25, 23);
 const mars_material = new THREE.MeshStandardMaterial({ map: marsLoader });
 const mars = new THREE.Mesh(mars_geometry, mars_material);
 mars.position.x = 5.6; // Position Mars at a distance from the Sun
 scene.add(mars);
 
+const marsSettings = {
+  marsRotationSpeed: .001
+};
+
 // Mars controls
 const marsFolder = gui.addFolder('Mars');
-marsFolder.add(mars.position, 'x', -20, 20).name('Position X');
-marsFolder.add(mars.position, 'y', -20, 20).name('Position Y');
-marsFolder.add(mars.position, 'z', -20, 20).name('Position Z');
+marsFolder.add(marsSettings, 'marsRotationSpeed', 0, 0.05).name('Rotation Speed');
 marsFolder.add(mars.material, 'wireframe').name('Wireframe');
 marsFolder.open();
 
@@ -131,18 +148,20 @@ jupiter_ring.rotation.x = Math.PI / 2;
 scene.add(jupiter_ring);
 
 // Jupiter using SphereGeometry
-let jupiterLoader = loader.load('./public/jupiter.jpg')
+let jupiterLoader = loader.load('/jupiter.jpg')
 const jupiter_geometry = new THREE.SphereGeometry(.31, 25, 23);
 const jupiter_material = new THREE.MeshStandardMaterial({ map: jupiterLoader });
 const jupiter = new THREE.Mesh(jupiter_geometry, jupiter_material);
 jupiter.position.x = 6.6; // Position Jupiter at a distance from the Sun
 scene.add(jupiter);
 
+const jupiterSettings = {
+  jupiterRotationSpeed: .001
+};
+
 // Jupiter controls
 const jupiterFolder = gui.addFolder('Jupiter');
-jupiterFolder.add(jupiter.position, 'x', -20, 20).name('Position X');
-jupiterFolder.add(jupiter.position, 'y', -20, 20).name('Position Y');
-jupiterFolder.add(jupiter.position, 'z', -20, 20).name('Position Z');
+jupiterFolder.add(jupiterSettings, 'jupiterRotationSpeed', 0, 0.05).name('Rotation Speed');
 jupiterFolder.add(jupiter.material, 'wireframe').name('Wireframe');
 jupiterFolder.open();
 
@@ -154,7 +173,7 @@ saturn_ring.rotation.x = Math.PI / 2;
 scene.add(saturn_ring);
 
 // Saturn using SphereGeometry
-let saturnLoader = loader.load('./public/saturn.jpg')
+let saturnLoader = loader.load('/saturn.jpg')
 const saturn_geometry = new THREE.SphereGeometry(.31, 25, 23);
 const saturn_material = new THREE.MeshStandardMaterial({ map: saturnLoader });
 const saturn = new THREE.Mesh(saturn_geometry, saturn_material);
@@ -169,11 +188,13 @@ const saturn_rings = new THREE.Mesh(saturn_rings_geometry, saturn_rings_material
 saturn_rings.position.x = 7.6; // Position Saturn Rings at the same distance as Saturn
 scene.add(saturn_rings);
 
+const saturnSettings = {
+  saturnRotationSpeed: .001
+};
+
 // Saturn controls
 const saturnFolder = gui.addFolder('Saturn');
-saturnFolder.add(saturn.position, 'x', -20, 20).name('Position X');
-saturnFolder.add(saturn.position, 'y', -20, 20).name('Position Y');
-saturnFolder.add(saturn.position, 'z', -20, 20).name('Position Z');
+saturnFolder.add(saturnSettings, 'saturnRotationSpeed', 0, 0.05).name('Rotation Speed');
 saturnFolder.add(saturn.material, 'wireframe').name('Wireframe');
 saturnFolder.open();
 
@@ -185,18 +206,20 @@ uranus_ring.rotation.x = Math.PI / 2;
 scene.add(uranus_ring);
 
 // Uranus using SphereGeometry
-let uranusLoader = loader.load('./public/uranus.jpg')
+let uranusLoader = loader.load('/uranus.jpg')
 const uranus_geometry = new THREE.SphereGeometry(.31, 25, 23);
 const uranus_material = new THREE.MeshStandardMaterial({ map: uranusLoader });
 const uranus = new THREE.Mesh(uranus_geometry, uranus_material);
 uranus.position.x = 8.6; // Position Uranus at a distance from the Sun
 scene.add(uranus);
 
+const uranusSettings = {
+  uranusRotationSpeed: .001
+};
+
 // Uranus controls
 const uranusFolder = gui.addFolder('Uranus');
-uranusFolder.add(uranus.position, 'x', -20, 20).name('Position X');
-uranusFolder.add(uranus.position, 'y', -20, 20).name('Position Y');
-uranusFolder.add(uranus.position, 'z', -20, 20).name('Position Z');
+uranusFolder.add(uranusSettings, 'uranusRotationSpeed', 0, 0.05).name('Rotation Speed');
 uranusFolder.add(uranus.material, 'wireframe').name('Wireframe');
 uranusFolder.open();
 
@@ -208,24 +231,24 @@ neptune_ring.rotation.x = Math.PI / 2;
 scene.add(neptune_ring);
 
 // Neptune using SphereGeometry
-let neptuneLoader = loader.load('./public/neptune.jpg')
+let neptuneLoader = loader.load('/neptune.jpg')
 const neptune_geometry = new THREE.SphereGeometry(.31, 25, 23);
 const neptune_material = new THREE.MeshStandardMaterial({ map: neptuneLoader });
 const neptune = new THREE.Mesh(neptune_geometry, neptune_material);
 neptune.position.x = 9.6; // Position Neptune at a distance from the Sun
 scene.add(neptune);
 
+const neptuneSettings = {
+  neptuneRotationSpeed: .001
+};
+
 // Neptune controls
 const neptuneFolder = gui.addFolder('Neptune');
-neptuneFolder.add(neptune.position, 'x', -20, 20).name('Position X');
-neptuneFolder.add(neptune.position, 'y', -20, 20).name('Position Y');
-neptuneFolder.add(neptune.position, 'z', -20, 20).name('Position Z');
+neptuneFolder.add(neptuneSettings, 'neptuneRotationSpeed', 0, 0.05).name('Rotation Speed');
 neptuneFolder.add(neptune.material, 'wireframe').name('Wireframe');
 neptuneFolder.open();
 
-const canvas = document.querySelector("canvas")
-const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
+
 
 window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight)
@@ -238,12 +261,14 @@ controls.enableDamping = true
 
 let clock = new THREE.Clock()
 
+let animationId;
+
 function animate() {
-  window.requestAnimationFrame(animate)
+  animationId = window.requestAnimationFrame(animate)
   renderer.render(scene, camera);
 
   // Sun rotation animation
-  sun.rotation.y += .001;
+  sun.rotation.y += sunSettings.sunRotationSpeed; // Adjust rotation speed as needed
 
   // Mercury orbit and rotation animation
   const mercuryOrbitRadius = 2.6;
@@ -251,63 +276,79 @@ function animate() {
   const elapsed = clock.getElapsedTime();
   mercury.position.x = Math.cos(elapsed * mercurySpeed) * mercuryOrbitRadius;
   mercury.position.z = Math.sin(elapsed * mercurySpeed) * mercuryOrbitRadius;
-  mercury.rotation.y += .001;
+  mercury.rotation.y += mercurySettings.mercuryRotationSpeed; // Adjust rotation speed as needed
 
   // Venus orbit and rotation animation
   const venusOrbitRadius = 3.6;
   const venusSpeed = 0.08; // Adjust for orbit speed
   venus.position.x = Math.cos(elapsed * venusSpeed) * venusOrbitRadius;
   venus.position.z = Math.sin(elapsed * venusSpeed) * venusOrbitRadius;
+  venus.rotation.y += venusSettings.venusRotationSpeed; // Adjust rotation speed as needed
 
   // Earth orbit and rotation animation
   const earthOrbitRadius = 4.6;
   const earthSpeed = 0.07; // Adjust for orbit speed
   earth.position.x = Math.cos(elapsed * earthSpeed) * earthOrbitRadius;
   earth.position.z = Math.sin(elapsed * earthSpeed) * earthOrbitRadius;
+  earth.rotation.y += earthSettings.earthRotationSpeed; // Adjust rotation speed as needed
 
   // Mars orbit and rotation animation
   const marsOrbitRadius = 5.6;
   const marsSpeed = 0.06; // Adjust for orbit speed
   mars.position.x = Math.cos(elapsed * marsSpeed) * marsOrbitRadius;
   mars.position.z = Math.sin(elapsed * marsSpeed) * marsOrbitRadius;
-  mars.rotation.y += .001;
+  mars.rotation.y += marsSettings.marsRotationSpeed;
 
   // Jupiter orbit and rotation animation
   const jupiterOrbitRadius = 7.6;
   const jupiterSpeed = 0.05; // Adjust for orbit speed
   jupiter.position.x = Math.cos(elapsed * jupiterSpeed) * jupiterOrbitRadius;
   jupiter.position.z = Math.sin(elapsed * jupiterSpeed) * jupiterOrbitRadius;
-  jupiter.rotation.y += .001;
+  jupiter.rotation.y += jupiterSettings.jupiterRotationSpeed;
 
   // Saturn orbit and rotation animation
   const saturnOrbitRadius = 9.6;
   const saturnSpeed = 0.04; // Adjust for orbit speed
   saturn.position.x = Math.cos(elapsed * saturnSpeed) * saturnOrbitRadius;
   saturn.position.z = Math.sin(elapsed * saturnSpeed) * saturnOrbitRadius;
-  saturn_rings.rotation.x = Math.PI / 4;
-  saturn_rings.rotation.y = Math.PI / 3;
+  saturn.rotation.z += saturnSettings.saturnRotationSpeed;
 
   // Saturn rings rotation animation
-  saturn_rings.rotation.z += .001;
   saturn_rings.position.x = saturn.position.x; // Keep rings aligned with Saturn
   saturn_rings.position.z = saturn.position.z; // Keep rings aligned with Saturn
+  saturn_rings.rotation.x = Math.PI / 2; // Ensure rings are horizontal
+  saturn_rings.rotation.y = Math.PI / 3; // Ensure rings are horizontal
+  saturn_rings.rotation.z += saturnSettings.saturnRotationSpeed; // Adjust rotation speed as needed
 
   // Uranus orbit and rotation animation
   const uranusOrbitRadius = 10.6;
   const uranusSpeed = 0.03; // Adjust for orbit speed
   uranus.position.x = Math.cos(elapsed * uranusSpeed) * uranusOrbitRadius;
   uranus.position.z = Math.sin(elapsed * uranusSpeed) * uranusOrbitRadius;
-  uranus.rotation.y += .001;
+  uranus.rotation.y += uranusSettings.uranusRotationSpeed;
 
   // Neptune orbit and rotation animation
   const neptuneOrbitRadius = 11.6;
   const neptuneSpeed = 0.02; // Adjust for orbit speed
   neptune.position.x = Math.cos(elapsed * neptuneSpeed) * neptuneOrbitRadius;
   neptune.position.z = Math.sin(elapsed * neptuneSpeed) * neptuneOrbitRadius;
-  neptune.rotation.y += .001;
+  neptune.rotation.y += neptuneSettings.neptuneRotationSpeed;
 
   // Update controls
   controls.update()
 }
 
-animate();
+function startAnimation() {
+  if (!animationId) {
+    animate();
+  }
+}
+
+function stopAnimation() {
+  if (animationId) {
+    window.cancelAnimationFrame(animationId);
+    animationId = null;
+  }
+}
+
+startAnimation();
